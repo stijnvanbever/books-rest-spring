@@ -1,17 +1,25 @@
 package be.stijn.books.booksrestspring.model;
 
-public class Book {
-    private final long id;
-    private final String title;
-    private final String author;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-    public Book(long id, String name, String author) {
-        this.id = id;
+@Entity
+public class Book {
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String title;
+    private String author;
+
+    protected Book() { }
+
+    public Book(String name, String author) {
         this.title = name;
         this.author = author;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

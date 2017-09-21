@@ -1,12 +1,9 @@
 package be.stijn.books.booksrestspring.controller;
 
 import be.stijn.books.booksrestspring.model.Book;
-import be.stijn.books.booksrestspring.service.BookService;
+import be.stijn.books.booksrestspring.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,15 +12,26 @@ import java.util.List;
 @RequestMapping(value = "api")
 public class BookController {
 
-    private final BookService bookService;
+    private final BookRepository bookRepository;
 
     @Autowired
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
+    public BookController(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
-    @RequestMapping(value = "books", method = RequestMethod.GET)
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
+    @ResponseBody
+    @GetMapping(value = "book")
+    public Iterable<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
+
+    @ResponseBody
+    @PostMapping(value = "book")
+    public Book addBook(@RequestBody Book book) {
+        return bookRepository.save(book);
+    }
+
+    @ResponseBody
+    @DeleteMapping(value = "book/{id}")
+    public void removeBook(@PathVariable(value = "id") Long id) { bookRepository.delete(id);}
 }
